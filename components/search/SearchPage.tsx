@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect, useState } from "react"
-import { useRouter } from "next/router"
+import { useSearchParams } from "next/navigation"
 
 import useSpotify from "../../hooks/useSpotify"
 import Cards from "../shared/Cards"
@@ -7,35 +9,36 @@ import Tracks from "../shared/Tracks"
 
 export default function SearchPage() {
     const spotifyApi = useSpotify()
-    const router = useRouter()
+    const searchParams = useSearchParams()
+    const query = searchParams.get('query')
     const [ tracks, setTracks ] = useState([])
     const [ playlists, setPlaylists ] = useState([])
     const [ artists, setArtists ] = useState([])
 
     useEffect(() => {
-        if (spotifyApi.getAccessToken()) {
-            spotifyApi.searchPlaylists(router.query.query, {limit: 5})
+        if (spotifyApi.getAccessToken() && query) {
+            spotifyApi.searchPlaylists(query, {limit: 5})
                 .then(function(data) {
                    setPlaylists(data.body.playlists.items)
                 }, function(err) {
                     console.error(err)
                 })
 
-            spotifyApi.searchArtists(router.query.query)
+            spotifyApi.searchArtists(query)
                 .then(function(data) {
                     setArtists(data.body.artists.items)
                 }, function(err) {
                     console.error(err)
                 })
 
-            spotifyApi.searchTracks(router.query.query, { limit: 10 })
+            spotifyApi.searchTracks(query, { limit: 10 })
                 .then(function(data) {
                     setTracks(data.body.tracks.items)
                 }, function(err) {
                     console.error(err)
                 })
         }
-    }, [spotifyApi.getAccessToken(), router.query.query])
+    }, [spotifyApi.getAccessToken(), query])
 
 
     return (

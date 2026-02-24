@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect, useState } from "react"
-import { useRouter } from "next/router"
+import { useParams } from "next/navigation"
 
 import Tracks from "../shared/Tracks"
 import useSpotify from "../../hooks/useSpotify"
@@ -13,8 +15,8 @@ interface Playlist {
 
 export default function SelectedPlaylist() {
     const spotifyApi = useSpotify()
-    const router = useRouter()
-    const { playlistId } = router.query
+    const params = useParams()
+    const playlistId = params?.playlistId as string
     const [ playlist, setPlaylist ] = useState(null as unknown as Playlist)
     const [ tracks, setTracks ] = useState<string[]>([])
     const [ offset, setOffset ] = useState(0)

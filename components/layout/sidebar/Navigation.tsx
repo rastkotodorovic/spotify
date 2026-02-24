@@ -1,22 +1,26 @@
+'use client'
+
 import Link from "next/link"
-import { LibraryIcon, HeartIcon, HomeIcon } from "@heroicons/react/outline"
+import { usePathname } from "next/navigation"
+import { BuildingLibraryIcon, HeartIcon, HomeIcon } from "@heroicons/react/24/outline"
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function Navigation({ router }) {
+export default function Navigation() {
+    const pathname = usePathname()
     const navigation = [
-        { name: 'Home', href: '/', icon: HomeIcon, current: router.pathname === '/' },
-        { name: 'Your library', href: '/collection/playlists',  icon: LibraryIcon, current: router.pathname === '/collection/playlists' },
-        { name: 'Liked songs', href: '/collection/tracks',  icon: HeartIcon, current: router.pathname === '/collection/tracks' },
+        { name: 'Home', href: '/', icon: HomeIcon, current: pathname === '/' },
+        { name: 'Your library', href: '/collection/playlists',  icon: BuildingLibraryIcon, current: pathname === '/collection/playlists' },
+        { name: 'Liked songs', href: '/collection/tracks',  icon: HeartIcon, current: pathname === '/collection/tracks' },
     ]
 
     return (
         <div className="space-y-1">
             {navigation.map((item) => (
                 <Link href={item.href} key={item.name}>
-                    <a
+                    <p
                         key={item.name}
                         className={classNames(
                             item.current ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50',
@@ -32,7 +36,7 @@ export default function Navigation({ router }) {
                             aria-hidden="true"
                         />
                         {item.name}
-                    </a>
+                    </p>
                 </Link>
             ))}
         </div>

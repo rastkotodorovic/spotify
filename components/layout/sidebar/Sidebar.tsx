@@ -1,4 +1,5 @@
-import { useRouter } from "next/router"
+'use client'
+
 import Link from 'next/link'
 import { useSession } from "next-auth/react"
 
@@ -9,7 +10,6 @@ import MyPlaylists from "./MyPlaylists"
 
 export default function Sidebar() {
     const { data: session } = useSession()
-    const router = useRouter()
 
     return (
         <>
@@ -31,12 +31,12 @@ export default function Sidebar() {
                     <SearchInput />
 
                     <div className="px-3 mt-6">
-                        <Navigation router={router} />
+                        <Navigation />
                         <hr className="mt-3" />
                     </div>
 
                     <div className="px-3 mb-24 overflow-y-auto">
-                        <MyPlaylists router={router} session={session} />
+                        <MyPlaylists session={session} />
                     </div>
                 </div>
             </div>

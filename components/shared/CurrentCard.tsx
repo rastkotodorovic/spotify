@@ -1,3 +1,5 @@
+'use client'
+
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 import useSpotify from "../../hooks/useSpotify"
@@ -138,12 +140,14 @@ export default function CurrentCard({ type, playlist }) {
     return (
       <>
           <h2 className="text-gray-500 text-xs font-medium uppercase tracking-wide mb-3">{type}</h2>
-          <a className="flex flex-col items-center bg-white rounded-lg border shadow-md md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-              <img
-                  className="object-cover w-full rounded-t-lg md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
-                  src={playlist?.images ? playlist?.images[0]?.url : ''}
-                  alt=""
-              />
+          <div className="flex flex-col items-center bg-white rounded-lg border shadow-md md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+              {playlist?.images?.[0]?.url && (
+                  <img
+                      className="object-cover w-full rounded-t-lg md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
+                      src={playlist.images[0].url}
+                      alt=""
+                  />
+              )}
               <div className="flex flex-col justify-between px-8 py-4 leading-normal w-full">
                   <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                       {playlist?.name ? playlist?.name : playlist?.username}
@@ -184,7 +188,7 @@ export default function CurrentCard({ type, playlist }) {
                       </div>
                   </div>
               </div>
-          </a>
+          </div>
       </>
     )
 }

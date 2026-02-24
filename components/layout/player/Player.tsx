@@ -1,20 +1,22 @@
+'use client'
+
 import { useEffect } from "react"
-import { useRecoilState } from "recoil"
 import { useSession } from "next-auth/react"
 
 import LeftSide from './LeftSide'
 import RightSide from "./RightSide"
 import Center from "./Center"
-import {isPlayingState, seekState, trackIdState} from "../../../atoms/trackAtom"
+import {useTrackStore} from "../../../store/playerStore"
 import useSpotify from "../../../hooks/useSpotify"
 import useTrack from "../../../hooks/useTrack"
 
 export default function Player() {
     const { data: session } = useSession()
     const spotifyApi = useSpotify()
-    const [ trackId, setTrackId ] = useRecoilState(trackIdState)
-    const [ isPlaying, setIsPlaying ] = useRecoilState(isPlayingState)
-    const [ seek, setSeek ] = useRecoilState(seekState)
+    const trackId = useTrackStore((state) => state.trackId)
+    const setTrackId = useTrackStore((state) => state.setTrackId)
+    const setIsPlaying = useTrackStore((state) => state.setIsPlaying)
+    const setSeek = useTrackStore((state) => state.setSeek)
     const track = useTrack()
 
     useEffect(() => {
@@ -29,8 +31,8 @@ export default function Player() {
 
         spotifyApi.getMyCurrentPlaybackState()
             .then((data) => {
-                setSeek(data.body.progress_ms)
-                setIsPlaying(data.body?.is_playing)
+                setSeek(data.body?.progress_ms ?? 0)
+                setIsPlaying(data.body?.is_playing ?? false)
             })
     }
 

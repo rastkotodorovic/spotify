@@ -1,10 +1,11 @@
+'use client'
+
 import {useEffect, useState} from "react"
 import useSpotify from "./useSpotify"
-import {useRecoilState} from "recoil"
-import {trackIdState} from "../atoms/trackAtom"
+import {useTrackStore} from "../store/playerStore"
 
 export default function useTrack() {
-    const [ trackId, setTrackId ] = useRecoilState(trackIdState)
+    const trackId = useTrackStore((state) => state.trackId)
     const spotifyApi = useSpotify()
     const [ track, setTrack ] = useState(null)
 

@@ -1,5 +1,7 @@
+'use client'
+
 import { SetStateAction, useEffect, useState } from "react"
-import { useRouter } from "next/router"
+import { useParams } from "next/navigation"
 
 import useSpotify from "../../hooks/useSpotify"
 import Cards from "../shared/Cards"
@@ -8,8 +10,8 @@ import CurrentCard from "../shared/CurrentCard"
 
 export default function SelectedArtist() {
     const spotifyApi = useSpotify()
-    const router = useRouter()
-    const { artistId } = router.query
+    const params = useParams()
+    const artistId = params?.artistId as string
     const [ tracks, setTracks ] = useState([])
     const [ albums, setAlbums ] = useState([])
     const [ artists, setArtists ] = useState([])

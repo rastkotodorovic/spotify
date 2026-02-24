@@ -1,4 +1,6 @@
-import { useRouter } from "next/router"
+'use client'
+
+import { useRouter } from "next/navigation"
 
 import useSpotify from "../../hooks/useSpotify"
 
@@ -64,7 +66,7 @@ export default function Card({ playlist, href, isFollowed, index, setIsFollowed 
 
     return (
         <div className="bg-gray-100 w-60 shadow-md rounded p-2">
-            <div className="group relative" onClick={() => router.push(`/${href}/${playlist?.id}`)}>
+            <div className="group relative" onClick={() => router.push(`/collection/${href === 'playlist' ? 'playlists' : href}/${playlist?.id}`)}>
                 <img alt="Placeholder" className=" rounded aspect-square"  src={playlist?.images[0]?.url} />
                 <div className="absolute bg-black rounded bg-opacity-0 group-hover:bg-opacity-60 w-full h-full top-0 flex items-center group-hover:opacity-100 duration-700 transition justify-evenly">
                     {href !== 'playlist' ? (
@@ -111,13 +113,9 @@ export default function Card({ playlist, href, isFollowed, index, setIsFollowed 
 
                 {playlist?.artists && (
                     <p className="text-gray-400 text-sm mt-1">
-                        {playlist?.artists.map((artist) => {
-                            return (
-                                <>
-                                    {`${artist.name} `}
-                                </>
-                            )
-                        })}
+                        {playlist?.artists.map((artist) => (
+                            <span key={artist.id}>{`${artist.name} `}</span>
+                        ))}
                     </p>
                 )}
             </div>

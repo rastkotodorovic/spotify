@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useState } from "react"
 
 import Card from "./Card"
@@ -10,9 +12,11 @@ export default function Cards({ playlists, title, href }) {
     useEffect(() => {
         if (spotifyApi.getAccessToken() && playlists?.length) {
             let ids: string[] = []
-            playlists.map((playlist) => {
-                ids.push(playlist.album ? playlist.album.id : playlist.id)
-            })
+            playlists
+                .filter((playlist) => playlist && (playlist.album || playlist.id))
+                .map((playlist) => {
+                    ids.push(playlist.album ? playlist.album.id : playlist.id)
+                })
 
             switch (href) {
                 case 'artists':
@@ -44,16 +48,18 @@ export default function Cards({ playlists, title, href }) {
                 role="list"
                 className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2 xl:grid-cols-6 mt-5 mb-16"
             >
-                {playlists?.map((playlist, index: Number) => (
-                    <Card
-                        key={playlist.album ? playlist.album.id : playlist.id}
-                        playlist={playlist.album ? playlist.album : playlist}
-                        href={href}
-                        index={index}
-                        isFollowed={isFollowed}
-                        setIsFollowed={setIsFollowed}
-                    />
-                ))}
+                {playlists
+                    ?.filter((playlist) => playlist && (playlist.album || playlist.id))
+                    .map((playlist, index: Number) => (
+                        <Card
+                            key={playlist.album ? playlist.album.id : playlist.id}
+                            playlist={playlist.album ? playlist.album : playlist}
+                            href={href}
+                            index={index}
+                            isFollowed={isFollowed}
+                            setIsFollowed={setIsFollowed}
+                        />
+                    ))}
             </ul>
         </>
     )

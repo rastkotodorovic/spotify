@@ -1,3 +1,5 @@
+'use client'
+
 import { SetStateAction, useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 
@@ -15,10 +17,11 @@ export default function Landing() {
 
     useEffect(() => {
         if (spotifyApi.getAccessToken()) {
-            spotifyApi.getFeaturedPlaylists()
-                .then((data: { body: { playlists: { items: SetStateAction<never[]> } } }) => {
-                    setFeaturedPlaylists(data.body.playlists.items)
+            spotifyApi.getUserPlaylists({ limit: 10 })
+                .then((data: { body: { items: SetStateAction<never[]> } }) => {
+                    setFeaturedPlaylists(data.body.items)
                 })
+                .catch((err: Error) => console.log('Something went wrong!', err))
 
             spotifyApi.getNewReleases({ limit : 10 })
                 .then(function(data: { body: { albums: { items: SetStateAction<never[]> } } }) {

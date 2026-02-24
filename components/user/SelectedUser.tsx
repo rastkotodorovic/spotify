@@ -1,5 +1,7 @@
+'use client'
+
 import {useSession} from "next-auth/react"
-import {useRouter} from "next/router"
+import {useParams} from "next/navigation"
 import {useEffect, useState} from "react"
 
 import useSpotify from "../../hooks/useSpotify"
@@ -9,9 +11,9 @@ import Tracks from "../shared/Tracks"
 
 export default function SelectedUser() {
     const spotifyApi = useSpotify()
-    const router = useRouter()
+    const params = useParams()
     const { data: session } = useSession()
-    const { userId } = router.query
+    const userId = params?.userId as string
     const [ user, setUser ] = useState({id: ''})
     const [ playlists, setPlaylists ] = useState([])
     const [ topTracks, setTopTracks ] = useState([])

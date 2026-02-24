@@ -1,13 +1,14 @@
-import { VolumeOffIcon, VolumeUpIcon } from "@heroicons/react/solid"
+'use client'
+
+import { SpeakerXMarkIcon, SpeakerWaveIcon } from "@heroicons/react/24/solid"
 import { useCallback, useEffect, useState } from "react"
 import { debounce } from 'lodash'
-import { useRecoilValue } from "recoil"
 
-import { isPlayingState } from "../../../atoms/trackAtom"
+import { useTrackStore } from "../../../store/playerStore"
 
 export default function RightSide({ spotifyApi }) {
     const [ volume, setVolume ] = useState(100)
-    const isPlaying = useRecoilValue(isPlayingState)
+    const isPlaying = useTrackStore((state) => state.isPlaying)
 
     useEffect(() => {
         if (volume >= 0 && volume <= 100 && isPlaying) {
@@ -25,7 +26,7 @@ export default function RightSide({ spotifyApi }) {
 
     return (
         <div className="flex items-center space-x-3 md:space-x-4 justify-end">
-            <VolumeOffIcon
+            <SpeakerXMarkIcon
                 className="btn-player"
                 onClick={() => setVolume(0)}
             />
@@ -37,7 +38,7 @@ export default function RightSide({ spotifyApi }) {
                 min={0}
                 max={100}
             />
-            <VolumeUpIcon
+            <SpeakerWaveIcon
                 className="btn-player"
                 onClick={() => setVolume(100)}
             />

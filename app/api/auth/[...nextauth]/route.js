@@ -1,32 +1,25 @@
-import NextAuth from "next-auth"
+import NextAuth from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
-import spotifyApi, { LOGIN_URL } from "../../../lib/spotify";
-
+import spotifyApi, { LOGIN_URL } from "../../../../lib/spotify";
 async function refreshAccessToken(token) {
     try {
         spotifyApi.setAccessToken(token.accessToken);
         spotifyApi.setRefreshToken(token.refreshToken);
 
         const { body: refreshedToken } = await spotifyApi.refreshAccessToken();
-        console.log('Refreshed token is', refreshedToken)
 
         return {
             ...token,
             accessToken: refreshedToken.access_token,
             accessTokenExpires: Date.now() + refreshedToken.expires_in * 1000,
             refreshToken: refreshedToken.refresh_token ?? token.refreshToken,
-        }
+        };
     } catch (error) {
-        console.log(error)
-
-        return {
-            ...token,
-            error: "RefreshAccessTokenError",
-        }
+        return { ...token, error: "RefreshAccessTokenError" };
     }
 }
 
-export default NextAuth({
+export const authOptions = {
     providers: [
         SpotifyProvider({
             clientId: process.env.SPOTIFY_ID,
@@ -35,9 +28,7 @@ export default NextAuth({
         }),
     ],
     secret: process.env.JWT_SECRET,
-    pages: {
-        signIn: '/login',
-    },
+    pages: { signIn: "/login" },
     callbacks: {
         async jwt({ token, account, user }) {
             if (account && user) {
@@ -47,21 +38,22 @@ export default NextAuth({
                     refreshToken: account.refresh_token,
                     username: account.providerAccountId,
                     accessTokenExpires: account.expires_at * 1000,
-                }
+                };
             }
 
-            if (Date.now() < token.accessTokenExpires) {
-                return token;
-            }
-
-            return await refreshAccessToken(token);
+            if (Date.now() < token.accessTokenExpires) return token;
+            return refreshAccessToken(token);
         },
         async session({ session, token }) {
             session.user.accessToken = token.accessToken;
             session.user.refreshToken = token.refreshToken;
             session.user.username = token.username;
-
             return session;
         },
-    }
-})
+    },
+};
+
+const handler = NextAuth(authOptions);
+
+// IMPORTANT: no default export in App Router routes
+export { handler as GET, handler as POST };

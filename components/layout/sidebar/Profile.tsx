@@ -1,5 +1,7 @@
+'use client'
+
 import { Menu, Transition } from "@headlessui/react"
-import { SelectorIcon } from "@heroicons/react/outline"
+import { HomeIcon } from "@heroicons/react/24/outline"
 import { Fragment } from "react"
 import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
@@ -25,7 +27,7 @@ export default function Profile({ session }) {
                                   <span className="text-gray-500 text-sm truncate">@{session?.user.email}</span>
                               </span>
                             </span>
-                            <SelectorIcon
+                            <HomeIcon
                                 className="flex-shrink-0 h-5 w-5 text-gray-400 group-hover:text-gray-500"
                                 aria-hidden="true"
                             />
@@ -46,14 +48,14 @@ export default function Profile({ session }) {
                         <Menu.Item>
                             {({ active }) => (
                                 <Link href={`/users/${session.user.username}`}>
-                                    <a
+                                    <p
                                         className={classNames(
                                             active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                             'block px-4 py-2 text-sm'
                                         )}
                                     >
                                         View profile
-                                    </a>
+                                    </p>
                                 </Link>
                             )}
                         </Menu.Item>
@@ -61,8 +63,7 @@ export default function Profile({ session }) {
                     <div className="py-1">
                         <Menu.Item>
                             {({ active }) => (
-                                <a
-                                    href="#"
+                                <p
                                     className={classNames(
                                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                         'block px-4 py-2 text-sm'
@@ -70,7 +71,7 @@ export default function Profile({ session }) {
                                     onClick={() => signOut()}
                                 >
                                     Logout
-                                </a>
+                                </p>
                             )}
                         </Menu.Item>
                     </div>

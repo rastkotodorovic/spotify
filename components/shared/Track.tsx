@@ -1,6 +1,6 @@
-import { useRecoilState, useRecoilValue } from "recoil"
+'use client'
 
-import { isPlayingState, seekState, trackIdState } from "../../atoms/trackAtom"
+import { useTrackStore } from "../../store/playerStore"
 import useSpotify from "../../hooks/useSpotify"
 import millisToMinutesAndSeconds from "../../lib/time"
 
@@ -16,12 +16,17 @@ type Props = {
 
 export default function Track({ track, number, isFollowed, setIsFollowed, lastTrack, playlist }: Props) {
     const spotifyApi = useSpotify()
-    const [ trackId, setTrackId ] = useRecoilState(trackIdState)
-    const [ isPlaying, setIsPlaying ] = useRecoilState(isPlayingState)
-    const [ seek, setSeek ] = useRecoilState(seekState)
+    const trackId = useTrackStore((state) => state.trackId)
+    const setTrackId = useTrackStore((state) => state.setTrackId)
+    const setIsPlaying = useTrackStore((state) => state.setIsPlaying)
+    const setSeek = useTrackStore((state) => state.setSeek)
 
     const playSong = () => {
-        spotifyApi.play({ context_uri: playlist.uri, offset: { position: number } })
+        const playOptions = playlist?.uri
+            ? { context_uri: playlist.uri, offset: { position: number } }
+            : { uris: [track.uri] }
+
+        spotifyApi.play(playOptions)
             .then(function() {
                 setTrackId(track.id)
                 setSeek(0)
@@ -71,12 +76,12 @@ export default function Track({ track, number, isFollowed, setIsFollowed, lastTr
                         src={track?.album?.images?.[0]?.url}
                         alt=""
                     />
-                    <a className="truncate hover:text-gray-700 cursor-pointer">
+                    <p className="truncate hover:text-gray-700 cursor-pointer">
                       <span>
                           {track.name}
                           <span className="text-gray-400 font-normal"> by {track.artists[0].name}</span>
                       </span>
-                    </a>
+                    </p>
                 </div>
             </td>
             <td className="px-6 py-3 text-sm text-gray-500 font-medium w-4/12">

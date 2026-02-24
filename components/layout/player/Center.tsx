@@ -1,21 +1,24 @@
+'use client'
+
 import { useCallback, useEffect, useState } from "react"
 import {
-    FastForwardIcon,
+    ForwardIcon,
     PauseIcon,
     PlayIcon,
-    ReplyIcon,
-    RewindIcon,
-    SwitchHorizontalIcon
-} from "@heroicons/react/solid"
-import { useRecoilState } from "recoil"
+    ArrowPathIcon,
+    BackwardIcon,
+    ArrowsRightLeftIcon
+} from "@heroicons/react/24/solid"
 import { debounce } from 'lodash'
 
-import { isPlayingState, seekState } from "../../../atoms/trackAtom"
+import { useTrackStore } from "../../../store/playerStore"
 import millisToMinutesAndSeconds from "../../../lib/time"
 
 export default function Center({ spotifyApi, track, changeSong }) {
-    const [ isPlaying, setIsPlaying ] = useRecoilState(isPlayingState)
-    const [ seek, setSeek ] = useRecoilState(seekState)
+    const isPlaying = useTrackStore((state) => state.isPlaying)
+    const setIsPlaying = useTrackStore((state) => state.setIsPlaying)
+    const seek = useTrackStore((state) => state.seek)
+    const setSeek = useTrackStore((state) => state.setSeek)
     const [ shuffle, setShuffle ] = useState(false)
 
     const handlePlayPause = () => {
@@ -85,11 +88,11 @@ export default function Center({ spotifyApi, track, changeSong }) {
         <>
             <div className="flex flex-col mt-3">
                 <div className="flex items-center justify-center">
-                    <SwitchHorizontalIcon
+                    <ArrowsRightLeftIcon
                         className={`btn-player ${shuffle ? 'fill-green-500' : ''}`}
                         onClick={handleShuffle}
                     />
-                    <RewindIcon
+                    <BackwardIcon
                         onClick={() => spotifyApi.skipToPrevious()}
                         className="ml-10 btn-player"
                     />
@@ -99,12 +102,12 @@ export default function Center({ spotifyApi, track, changeSong }) {
                         <PlayIcon onClick={handlePlayPause} className="btn-play" />
                     )}
 
-                    <FastForwardIcon
+                    <ForwardIcon
                         onClick={() => spotifyApi.skipToNext()}
                         className="mr-10 btn-player"
                     />
 
-                    <ReplyIcon
+                    <ArrowPathIcon
                         className="btn-player"
                         onClick={() => spotifyApi.setRepeat('track')}
                     />

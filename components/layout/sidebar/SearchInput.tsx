@@ -1,6 +1,7 @@
-import { SearchIcon } from "@heroicons/react/outline"
+'use client'
+
 import { useCallback } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { debounce } from 'lodash'
 
 export default function SearchInput() {
@@ -23,7 +24,7 @@ export default function SearchInput() {
                     className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
                     aria-hidden="true"
                 >
-                    <SearchIcon className="mr-3 h-4 w-4 text-gray-400" aria-hidden="true" />
+                    ?
                 </div>
                 <input
                     type="text"
