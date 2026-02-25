@@ -21,30 +21,27 @@ export default function Landing() {
                 .then((data: { body: { items: SetStateAction<never[]> } }) => {
                     setFeaturedPlaylists(data.body.items)
                 })
-                .catch((err: Error) => console.log('Something went wrong!', err))
+                .catch(() => {})
 
             spotifyApi.getNewReleases({ limit : 10 })
                 .then(function(data: { body: { albums: { items: SetStateAction<never[]> } } }) {
                     setNewAlbums(data.body.albums.items)
                   })
-                .catch(function(err: Error) {
-                     console.log("Something went wrong!", err)
+                .catch(function() {
                   })
 
             spotifyApi.getMyRecentlyPlayedTracks({ limit : 10 })
                     .then(function(data: { body: { items: SetStateAction<never[]> } }) {
                         setRecentlyPlayed(data.body.items)
                     })
-                    .catch(function(err: Error) {
-                        console.log('Something went wrong!', err)
+                    .catch(function() {
                     })
 
             spotifyApi.getMyTopArtists()
                 .then(function(data: { body: { items: SetStateAction<never[]> } }) {
                     setTopArtists(data.body.items)
                 })
-                .catch(function(err: Error) {
-                    console.log('Something went wrong!', err)
+                .catch(function() {
                 })
         }
     }, [session, spotifyApi])

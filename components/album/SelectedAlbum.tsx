@@ -21,8 +21,7 @@ export default function SelectedAlbum() {
                     setAlbum(data.body)
                     setTracks(data.body.tracks.items)
                 })
-                .catch(function (err: Error) {
-                    console.error(err)
+                .catch(function () {
                 })
         }
     }, [spotifyApi.getAccessToken(), albumId])

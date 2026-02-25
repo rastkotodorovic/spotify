@@ -14,9 +14,7 @@ export default function LeftSide({ track }) {
                 .then(function(data) {
                     setIsFollowed(data.body[0])
                 })
-                .catch(function(err: Error) {
-                    console.log('Something went wrong!', err)
-                })
+                .catch(function() {})
         }
     }, [spotifyApi.getAccessToken(), track])
 
@@ -26,27 +24,25 @@ export default function LeftSide({ track }) {
                 .then(function () {
                     setIsFollowed(false)
                 })
-                .catch(function (err: Error) {
-                    console.log('Something went wrong!', err)
-                })
+                .catch(function () {})
         } else {
             spotifyApi.addToMySavedTracks([track.id])
                 .then(function () {
                     setIsFollowed(true)
                 })
-                .catch(function (err: Error) {
-                    console.log('Something went wrong!', err)
-                })
+                .catch(function () {})
         }
     }
 
     return (
         <div className="flex items-center space-x-4">
-            <img
-                className="hidden md:inline h-16 w-16 rounded"
-                src={track?.album?.images?.[0]?.url}
-                alt={track?.album?.name}
-            />
+            {track?.album?.images?.[0]?.url && (
+                <img
+                    className="hidden md:inline h-16 w-16 rounded"
+                    src={track.album.images[0].url}
+                    alt={track?.album?.name}
+                />
+            )}
             <div className="flex justify-between">
                 <div>
                     <h3 className="text-sm text-gray-800">{ track?.name }</h3>

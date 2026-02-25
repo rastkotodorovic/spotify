@@ -4,8 +4,7 @@ import LoginProviders from "../../components/LoginProviders";
 
 async function getAuthProviders() {
   // Fetch providers from NextAuth API at runtime to support App Router
-  const res = await fetch("http://localhost:3000/api/auth/providers", { cache: "no-store" });
-  console.log(res)
+  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/providers`, { cache: "no-store" });
   if (!res.ok) return null;
   return res.json();
 }

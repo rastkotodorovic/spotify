@@ -17,36 +17,28 @@ export default function CurrentCard({ type, playlist }) {
                       .then(function(data) {
                           setIsFollowing(data.body[0])
                       })
-                      .catch(function(err: Error) {
-                          console.log('Something went wrong!', err)
-                      })
+                      .catch(function() {})
                   break;
               case 'artist':
                   spotifyApi.isFollowingArtists([playlist.id])
                       .then(function(data) {
                           setIsFollowing(data.body[0])
                       })
-                      .catch(function(err: Error) {
-                          console.log('Something went wrong!', err)
-                      })
+                      .catch(function() {})
                   break;
               case 'user':
                   spotifyApi.isFollowingUsers([playlist.id])
                       .then(function(data) {
                           setIsFollowing(data.body[0])
                       })
-                      .catch(function(err: Error) {
-                          console.log('Something went wrong!', err)
-                      })
+                      .catch(function() {})
                   break;
               case 'album':
                   spotifyApi.containsMySavedAlbums([playlist.id])
                       .then(function(data) {
                           setIsFollowing(data.body[0])
                       })
-                      .catch(function(err: Error) {
-                          console.log('Something went wrong!', err)
-                      })
+                      .catch(function() {})
                   break;
           }
       }
@@ -60,17 +52,13 @@ export default function CurrentCard({ type, playlist }) {
                         .then(function() {
                             setIsFollowing(false)
                         })
-                        .catch(function(err: Error) {
-                            console.log('Something went wrong!', err)
-                        })
+                        .catch(function() {})
                 } else {
                     spotifyApi.followPlaylist(playlist.id)
                         .then(function() {
                             setIsFollowing(true)
                         })
-                        .catch(function(err: Error) {
-                            console.log('Something went wrong!', err)
-                        })
+                        .catch(function() {})
                 }
                 break;
             case 'artist':
@@ -79,17 +67,13 @@ export default function CurrentCard({ type, playlist }) {
                         .then(function() {
                             setIsFollowing(false)
                         })
-                        .catch(function(err: Error) {
-                            console.log('Something went wrong!', err)
-                        })
+                        .catch(function() {})
                 } else {
-                    spotifyApi.followPlaylist([playlist.id])
+                    spotifyApi.followArtists([playlist.id])
                         .then(function() {
                             setIsFollowing(true)
                         })
-                        .catch(function(err: Error) {
-                            console.log('Something went wrong!', err)
-                        })
+                        .catch(function() {})
                 }
                 break;
             case 'user':
@@ -98,17 +82,13 @@ export default function CurrentCard({ type, playlist }) {
                         .then(function() {
                             setIsFollowing(false)
                         })
-                        .catch(function(err: Error) {
-                            console.log('Something went wrong!', err)
-                        })
+                        .catch(function() {})
                 } else {
                     spotifyApi.followUsers([playlist.id])
                         .then(function() {
                             setIsFollowing(true)
                         })
-                        .catch(function(err: Error) {
-                            console.log('Something went wrong!', err)
-                        })
+                        .catch(function() {})
                 }
                 break;
             case 'album':
@@ -117,24 +97,16 @@ export default function CurrentCard({ type, playlist }) {
                         .then(function() {
                             setIsFollowing(false)
                         })
-                        .catch(function(err: Error) {
-                            console.log('Something went wrong!', err)
-                        })
+                        .catch(function() {})
                 } else {
                     spotifyApi.addToMySavedAlbums([playlist.id])
                         .then(function() {
                             setIsFollowing(true)
                         })
-                        .catch(function(err: Error) {
-                            console.log('Something went wrong!', err)
-                        })
+                        .catch(function() {})
                 }
                 break;
         }
-    }
-
-    function createMarkup(description: string) {
-        return {__html: description};
     }
 
     return (
@@ -152,12 +124,12 @@ export default function CurrentCard({ type, playlist }) {
                   <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                       {playlist?.name ? playlist?.name : playlist?.username}
                   </h5>
-                  <p className="mb-2 font-normal text-gray-700 dark:text-gray-400" dangerouslySetInnerHTML={createMarkup(playlist?.description)} />
+                  <p className="mb-2 font-normal text-gray-700 dark:text-gray-400">{playlist?.description}</p>
                   <div className="flex justify-between">
                       <div>
                           {playlist?.followers && (
                               <p className="mb-2 font-normal text-gray-600 dark:text-gray-400">
-                                  {playlist?.followers?.total.toLocaleString()} followers
+                                  {playlist?.followers?.total?.toLocaleString()} followers
                               </p>
                           )}
 

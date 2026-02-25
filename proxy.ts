@@ -7,8 +7,6 @@ export async function proxy(req: NextRequest) {
 
     const { pathname } = req.nextUrl
 
-    console.log(token)
-
     if (token || pathname.includes('/api/auth') ||  pathname === '/login') {
         return NextResponse.next()
     }

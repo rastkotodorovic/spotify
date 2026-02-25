@@ -28,12 +28,12 @@ export default function Center({ spotifyApi, track, changeSong }) {
                     spotifyApi.pause()
                         .then(function() {
                             setIsPlaying(false)
-                        }).catch((err: Error) => console.log(err))
+                        }).catch(() => {})
                 } else {
                     spotifyApi.play()
                         .then(function() {
                             setIsPlaying(true)
-                        }).catch((err: Error) => console.log(err))
+                        }).catch(() => {})
                 }
             })
     }
@@ -70,11 +70,7 @@ export default function Center({ spotifyApi, track, changeSong }) {
     const debouncedChangeTrackSeek = useCallback(
         debounce((seek) => {
             spotifyApi.seek(seek)
-                .then(function() {
-                    console.log('Seek to ' + seek)
-                }, function(err) {
-                    console.log('Something went wrong!', err)
-                })
+                .then(function() {}, function() {})
         }, 100),
         []
     )

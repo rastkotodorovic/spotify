@@ -1,3 +1,5 @@
+'use client'
+
 import Sidebar from "./sidebar/Sidebar"
 import Player from "./player/Player"
 import Header from "./Header"

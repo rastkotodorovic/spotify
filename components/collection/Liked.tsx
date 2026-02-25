@@ -23,8 +23,7 @@ export default function Liked() {
 
                     setTotalTracks(data.body.total)
                 })
-                .catch(function(err: Error) {
-                    console.log('Something went wrong!', err)
+                .catch(function() {
                 })
         }
     }, [spotifyApi.getAccessToken(), offset])

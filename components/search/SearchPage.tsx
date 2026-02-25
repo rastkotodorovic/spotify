@@ -20,22 +20,19 @@ export default function SearchPage() {
             spotifyApi.searchPlaylists(query, {limit: 5})
                 .then(function(data) {
                    setPlaylists(data.body.playlists.items)
-                }, function(err) {
-                    console.error(err)
+                }, function() {
                 })
 
             spotifyApi.searchArtists(query)
                 .then(function(data) {
                     setArtists(data.body.artists.items)
-                }, function(err) {
-                    console.error(err)
+                }, function() {
                 })
 
             spotifyApi.searchTracks(query, { limit: 10 })
                 .then(function(data) {
                     setTracks(data.body.tracks.items)
-                }, function(err) {
-                    console.error(err)
+                }, function() {
                 })
         }
     }, [spotifyApi.getAccessToken(), query])

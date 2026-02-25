@@ -44,8 +44,7 @@ export default function Tracks({ tracks, offset = null, setOffset = null, playli
                 .then(function(data) {
                     setIsFollowed(data.body)
                 })
-                .catch(function(err: Error) {
-                    console.log('Something went wrong!', err)
+                .catch(function() {
                 })
         }
     }, [spotifyApi.getAccessToken(), tracks])

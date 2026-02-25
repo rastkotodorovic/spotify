@@ -15,9 +15,8 @@ export default function MyAlbums() {
                 .then(function(data: { body: { items: SetStateAction<never[]>; }; }) {
                     setAlbums(data.body.items)
                 })
-                .catch(function(err: Error) {
-                    console.log('Something went wrong!', err)
-                });
+                .catch(function() {
+                })
         }
     }, [spotifyApi.getAccessToken()])
 

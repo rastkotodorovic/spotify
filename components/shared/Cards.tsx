@@ -24,8 +24,7 @@ export default function Cards({ playlists, title, href }) {
                         .then(function(data) {
                             setIsFollowed(data.body)
                         })
-                        .catch(function(err: Error) {
-                            console.log('Something went wrong!', err)
+                        .catch(function() {
                         })
                     break;
                 case 'albums':
@@ -33,8 +32,7 @@ export default function Cards({ playlists, title, href }) {
                         .then(function(data) {
                             setIsFollowed(data.body)
                         })
-                        .catch(function(err: Error) {
-                            console.log('Something went wrong!', err)
+                        .catch(function() {
                         })
                     break;
             }

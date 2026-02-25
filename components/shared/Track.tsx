@@ -32,7 +32,7 @@ export default function Track({ track, number, isFollowed, setIsFollowed, lastTr
                 setSeek(0)
                 setIsPlaying(true)
             })
-            .catch((err: Error) => console.log(err))
+            .catch(() => {})
     }
 
     const handleFollow = (e: { stopPropagation: () => void }) => {
@@ -45,8 +45,7 @@ export default function Track({ track, number, isFollowed, setIsFollowed, lastTr
 
                     setIsFollowed(newArr)
                 })
-                .catch(function (err: Error) {
-                    console.log('Something went wrong!', err)
+                .catch(function () {
                 })
         } else {
             spotifyApi.addToMySavedTracks([track.id])
@@ -56,8 +55,7 @@ export default function Track({ track, number, isFollowed, setIsFollowed, lastTr
 
                     setIsFollowed(newArr)
                 })
-                .catch(function (err: Error) {
-                    console.log('Something went wrong!', err)
+                .catch(function () {
                 })
         }
     }

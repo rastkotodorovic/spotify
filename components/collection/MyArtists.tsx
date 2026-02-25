@@ -15,8 +15,7 @@ export default function MyArtists() {
                 .then(function(data: { body: { artists: { items: SetStateAction<never[]> } } }) {
                     setArtists(data.body.artists.items)
                 })
-                .catch(function(err: Error) {
-                    console.log('Something went wrong!', err)
+                .catch(function() {
                 })
         }
     }, [spotifyApi.getAccessToken()])

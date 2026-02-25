@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Providers from "./providers";
 import "../styles/globals.css";
+
+export const metadata: Metadata = {
+  title: 'Spotify',
+  description: 'Spotify clone built with Next.js',
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

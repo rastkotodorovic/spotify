@@ -20,8 +20,7 @@ export default function Card({ playlist, href, isFollowed, index, setIsFollowed 
 
                             setIsFollowed(newArr)
                         })
-                        .catch(function (err: Error) {
-                            console.log('Something went wrong!', err)
+                        .catch(function () {
                         })
                 } else {
                     spotifyApi.followArtists([playlist.id])
@@ -31,8 +30,7 @@ export default function Card({ playlist, href, isFollowed, index, setIsFollowed 
 
                             setIsFollowed(newArr)
                         })
-                        .catch(function (err: Error) {
-                            console.log('Something went wrong!', err)
+                        .catch(function () {
                         })
                 }
                 break
@@ -45,8 +43,7 @@ export default function Card({ playlist, href, isFollowed, index, setIsFollowed 
 
                             setIsFollowed(newArr)
                         })
-                        .catch(function(err: Error) {
-                            console.log('Something went wrong!', err)
+                        .catch(function() {
                         })
                 } else {
                     spotifyApi.addToMySavedAlbums([playlist.id])
@@ -56,8 +53,7 @@ export default function Card({ playlist, href, isFollowed, index, setIsFollowed 
 
                             setIsFollowed(newArr)
                         })
-                        .catch(function(err: Error) {
-                            console.log('Something went wrong!', err)
+                        .catch(function() {
                         })
                 }
                 break

@@ -23,16 +23,14 @@ export default function SelectedArtist() {
               .then(function(data: { body: SetStateAction<never[]> }) {
                 setArtist(data.body)
               })
-              .catch(function(err: Error) {
-                console.error(err)
+              .catch(function() {
               })
 
           spotifyApi.getArtistTopTracks(artistId, 'GB')
               .then(function(data: { body: { tracks: SetStateAction<never[]> } }) {
                   setTracks(data.body.tracks)
               })
-              .catch(function(err: Error) {
-                  console.log('Something went wrong!', err)
+              .catch(function() {
               })
 
             spotifyApi.getArtistRelatedArtists(artistId)
@@ -44,8 +42,7 @@ export default function SelectedArtist() {
                 .then(function(data: { body: { items: SetStateAction<never[]> } }) {
                   setAlbums(data.body.items)
                 })
-                .catch(function(err: Error) {
-                  console.error(err)
+                .catch(function() {
                 })
         }
     }, [spotifyApi.getAccessToken(), artistId])

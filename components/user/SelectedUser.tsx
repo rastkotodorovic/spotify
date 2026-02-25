@@ -34,8 +34,7 @@ export default function SelectedUser() {
                 .then(function (data) {
                     setPlaylists(data.body.items)
                 })
-                .catch(function (err) {
-                    console.log('Something went wrong!', err)
+                .catch(function () {
                 })
 
             if (user.id === session?.user?.username) {
@@ -43,16 +42,14 @@ export default function SelectedUser() {
                     .then(function (data) {
                         setTopTracks(data.body.items)
                     })
-                    .catch(function (err) {
-                        console.log('Something went wrong!', err)
+                    .catch(function () {
                     })
 
                 spotifyApi.getMyTopArtists()
                     .then(function (data) {
                         setTopArtists(data.body.items)
                     })
-                    .catch(function (err) {
-                        console.log('Something went wrong!', err)
+                    .catch(function () {
                     })
             }
         }
