@@ -3,6 +3,7 @@
 import { useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { debounce } from 'lodash'
+import { EyeIcon } from "@heroicons/react/24/solid";
 
 export default function SearchInput() {
     const router = useRouter()
@@ -24,7 +25,9 @@ export default function SearchInput() {
                     className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
                     aria-hidden="true"
                 >
-                    ?
+                    <EyeIcon
+                        className="w-4 h-4 hover:fill-gray-500 active:scale-90"
+                    />
                 </div>
                 <input
                     type="text"

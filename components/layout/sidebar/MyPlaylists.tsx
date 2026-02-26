@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect } from "react"
-import { useRouter, usePathname } from "next/navigation"
+import { useEffect } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 
-import useSpotify from "../../../hooks/useSpotify"
-import { usePlaylistStore } from "../../../store/playerStore"
+import useAccessToken from '../../../hooks/useAccessToken'
+import { getMyPlaylists } from '../../../lib/spotifyLibrary'
+import { usePlaylistStore } from '../../../store/playerStore'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -13,18 +14,18 @@ function classNames(...classes: string[]) {
 export default function MyPlaylists({ session }) {
     const playlists = usePlaylistStore((state) => state.myPlaylists)
     const setPlaylists = usePlaylistStore((state) => state.setMyPlaylists)
-    const spotifyApi = useSpotify()
+    const accessToken = useAccessToken()
     const router = useRouter()
     const pathname = usePathname()
 
     useEffect(() => {
-        if (spotifyApi.getAccessToken()) {
-            spotifyApi.getUserPlaylists()
+        if (accessToken) {
+            getMyPlaylists(accessToken)
                 .then((data) => {
-                    setPlaylists(data.body.items)
+                    setPlaylists(data.items)
                 })
         }
-    }, [session, spotifyApi])
+    }, [session, accessToken])
 
     return (
         <div className="mt-3 space-y-1" role="group" aria-labelledby="desktop-teams-headline">

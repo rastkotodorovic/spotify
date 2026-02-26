@@ -1,11 +1,11 @@
 'use client'
 
-import { useParams } from "next/navigation"
-import { SetStateAction, useEffect, useState } from "react"
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
-import useSpotify from "../../hooks/useSpotify"
-import CurrentCard from "../shared/CurrentCard"
-import Tracks from "../shared/Tracks"
+import useSpotify from '../../hooks/useSpotify'
+import CurrentCard from '../shared/CurrentCard'
+import Tracks from '../shared/Tracks'
 
 export default function SelectedAlbum() {
     const spotifyApi = useSpotify()

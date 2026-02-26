@@ -1,32 +1,33 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
 
-import useSpotify from "../../hooks/useSpotify"
-import Tracks from "../shared/Tracks"
+import useAccessToken from '../../hooks/useAccessToken'
+import spotifyFetch from '../../lib/spotifyFetch'
+import Tracks from '../shared/Tracks'
 
 export default function Liked() {
-    const spotifyApi = useSpotify()
+    const accessToken = useAccessToken()
     const [ tracks, setTracks ] = useState<string[]>([])
     const [ totalTracks, setTotalTracks ] = useState(0)
     const [ offset, setOffset ] = useState(0)
 
     useEffect(() => {
-        if (spotifyApi.getAccessToken()) {
-            spotifyApi.getMySavedTracks({ offset: offset })
+        if (accessToken) {
+            spotifyFetch(accessToken, '/me/tracks', { params: { offset: offset } })
                 .then(function(data) {
                     if (tracks.length) {
-                        setTracks((oldArray) => [...oldArray, ...data.body.items])
+                        setTracks((oldArray) => [...oldArray, ...data.items])
                     } else {
-                        setTracks(data.body.items)
+                        setTracks(data.items)
                     }
 
-                    setTotalTracks(data.body.total)
+                    setTotalTracks(data.total)
                 })
                 .catch(function() {
                 })
         }
-    }, [spotifyApi.getAccessToken(), offset])
+    }, [accessToken, offset])
 
     return (
         <>

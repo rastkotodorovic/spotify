@@ -1,9 +1,10 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from 'react'
 
-import Track from "./Track"
-import useSpotify from "../../hooks/useSpotify"
+import Track from './Track'
+import useAccessToken from '../../hooks/useAccessToken'
+import { libraryContains } from '../../lib/spotifyLibrary'
 
 type Props = {
     tracks: any[]
@@ -18,7 +19,7 @@ interface RefObject {
 }
 
 export default function Tracks({ tracks, offset = null, setOffset = null, playlist }: Props) {
-    const spotifyApi = useSpotify()
+    const accessToken = useAccessToken()
     const [ isFollowed, setIsFollowed ] = useState<boolean[]>([])
 
     const observer = useRef<RefObject>()
@@ -34,20 +35,20 @@ export default function Tracks({ tracks, offset = null, setOffset = null, playli
     }, [])
 
     useEffect(() => {
-        if (spotifyApi.getAccessToken() && tracks?.length) {
+        if (accessToken && tracks?.length) {
             let ids: string[] = []
             tracks.map((track) => {
                 ids.push(track.track ? track.track.id : track.id)
             })
 
-            spotifyApi.containsMySavedTracks(ids.slice(0, 50))
+            libraryContains(accessToken, 'track', ids.slice(0, 50))
                 .then(function(data) {
-                    setIsFollowed(data.body)
+                    setIsFollowed(data)
                 })
                 .catch(function() {
                 })
         }
-    }, [spotifyApi.getAccessToken(), tracks])
+    }, [accessToken, tracks])
 
     return (
         <div className="hidden mt-8 sm:block mb-24">

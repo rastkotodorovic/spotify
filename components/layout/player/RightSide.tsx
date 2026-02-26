@@ -1,10 +1,10 @@
 'use client'
 
-import { SpeakerXMarkIcon, SpeakerWaveIcon } from "@heroicons/react/24/solid"
-import { useCallback, useEffect, useState } from "react"
+import { SpeakerXMarkIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid'
+import { useCallback, useEffect, useState } from 'react'
 import { debounce } from 'lodash'
 
-import { useTrackStore } from "../../../store/playerStore"
+import { useTrackStore } from '../../../store/playerStore'
 
 export default function RightSide({ spotifyApi }) {
     const [ volume, setVolume ] = useState(100)

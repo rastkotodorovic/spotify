@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 
-import useSpotify from "../../hooks/useSpotify"
-import Cards from "../shared/Cards"
-import Tracks from "../shared/Tracks"
+import useSpotify from '../../hooks/useSpotify'
+import Cards from '../shared/Cards'
+import Tracks from '../shared/Tracks'
 
 export default function SearchPage() {
     const spotifyApi = useSpotify()
@@ -23,7 +23,7 @@ export default function SearchPage() {
                 }, function() {
                 })
 
-            spotifyApi.searchArtists(query)
+            spotifyApi.searchArtists(query, { limit: 10 })
                 .then(function(data) {
                     setArtists(data.body.artists.items)
                 }, function() {

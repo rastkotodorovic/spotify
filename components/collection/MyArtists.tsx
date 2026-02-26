@@ -1,24 +1,25 @@
 'use client'
 
-import { SetStateAction, useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
 
-import useSpotify from "../../hooks/useSpotify"
-import Cards from "../shared/Cards"
+import useAccessToken from '../../hooks/useAccessToken'
+import spotifyFetch from '../../lib/spotifyFetch'
+import Cards from '../shared/Cards'
 
 export default function MyArtists() {
-    const spotifyApi = useSpotify()
+    const accessToken = useAccessToken()
     const [ artists, setArtists ] = useState([])
 
     useEffect(() => {
-        if (spotifyApi.getAccessToken()) {
-            spotifyApi.getFollowedArtists()
-                .then(function(data: { body: { artists: { items: SetStateAction<never[]> } } }) {
-                    setArtists(data.body.artists.items)
+        if (accessToken) {
+            spotifyFetch(accessToken, '/me/following', { params: { type: 'artist' } })
+                .then(function(data) {
+                    setArtists(data.artists.items)
                 })
                 .catch(function() {
                 })
         }
-    }, [spotifyApi.getAccessToken()])
+    }, [accessToken])
 
     return (
         <div className="px-4 mt-6 mx-8 sm:px-6 lg:px-8 mb-40">

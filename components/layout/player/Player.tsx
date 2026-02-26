@@ -1,14 +1,14 @@
 'use client'
 
-import { useEffect } from "react"
-import { useSession } from "next-auth/react"
+import { useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 
 import LeftSide from './LeftSide'
-import RightSide from "./RightSide"
-import Center from "./Center"
-import {useTrackStore} from "../../../store/playerStore"
-import useSpotify from "../../../hooks/useSpotify"
-import useTrack from "../../../hooks/useTrack"
+import RightSide from './RightSide'
+import Center from './Center'
+import { useTrackStore } from '../../../store/playerStore'
+import useSpotify from '../../../hooks/useSpotify'
+import useTrack from '../../../hooks/useTrack'
 
 export default function Player() {
     const { data: session } = useSession()
@@ -20,7 +20,7 @@ export default function Player() {
     const track = useTrack()
 
     useEffect(() => {
-        if (spotifyApi.getAccessToken() && ! trackId) {
+        if (spotifyApi.getAccessToken() && !trackId) {
             getCurrentTrack()
         }
     }, [trackId, spotifyApi, session])

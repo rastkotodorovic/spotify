@@ -1,16 +1,17 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
 
-import Card from "./Card"
-import useSpotify from "../../hooks/useSpotify"
+import Card from './Card'
+import useAccessToken from '../../hooks/useAccessToken'
+import { libraryContains } from '../../lib/spotifyLibrary'
 
 export default function Cards({ playlists, title, href }) {
-    const spotifyApi = useSpotify()
-    const [ isFollowed, setIsFollowed ] = useState([])
+    const accessToken = useAccessToken()
+    const [ isFollowed, setIsFollowed ] = useState<boolean[]>([])
 
     useEffect(() => {
-        if (spotifyApi.getAccessToken() && playlists?.length) {
+        if (accessToken && playlists?.length) {
             let ids: string[] = []
             playlists
                 .filter((playlist) => playlist && (playlist.album || playlist.id))
@@ -18,26 +19,17 @@ export default function Cards({ playlists, title, href }) {
                     ids.push(playlist.album ? playlist.album.id : playlist.id)
                 })
 
-            switch (href) {
-                case 'artists':
-                    spotifyApi.isFollowingArtists(ids)
-                        .then(function(data) {
-                            setIsFollowed(data.body)
-                        })
-                        .catch(function() {
-                        })
-                    break;
-                case 'albums':
-                    spotifyApi.containsMySavedAlbums(ids)
-                        .then(function(data) {
-                            setIsFollowed(data.body)
-                        })
-                        .catch(function() {
-                        })
-                    break;
+            const type = href === 'artists' ? 'artist' : 'album'
+            if (href === 'artists' || href === 'albums') {
+                libraryContains(accessToken, type, ids)
+                    .then(function(data) {
+                        setIsFollowed(data)
+                    })
+                    .catch(function() {
+                    })
             }
         }
-    }, [spotifyApi.getAccessToken(), playlists])
+    }, [accessToken, playlists])
 
     return (
         <>

@@ -1,111 +1,37 @@
 'use client'
 
-import { useSession } from "next-auth/react"
-import { useEffect, useState } from "react"
-import useSpotify from "../../hooks/useSpotify"
+import { useEffect, useState } from 'react'
+import useAccessToken from '../../hooks/useAccessToken'
+import { libraryContains, libraryAdd, libraryRemove } from '../../lib/spotifyLibrary'
 
 export default function CurrentCard({ type, playlist }) {
-    const spotifyApi = useSpotify()
+    const accessToken = useAccessToken()
     const [ isFollowing, setIsFollowing ] = useState(false)
-    const { data: session } = useSession()
 
     useEffect(() => {
-      if (spotifyApi.getAccessToken() && playlist?.id) {
-          switch(type) {
-              case 'playlist':
-                  spotifyApi.areFollowingPlaylist(playlist.owner.id, playlist.id, [session?.user?.username])
-                      .then(function(data) {
-                          setIsFollowing(data.body[0])
-                      })
-                      .catch(function() {})
-                  break;
-              case 'artist':
-                  spotifyApi.isFollowingArtists([playlist.id])
-                      .then(function(data) {
-                          setIsFollowing(data.body[0])
-                      })
-                      .catch(function() {})
-                  break;
-              case 'user':
-                  spotifyApi.isFollowingUsers([playlist.id])
-                      .then(function(data) {
-                          setIsFollowing(data.body[0])
-                      })
-                      .catch(function() {})
-                  break;
-              case 'album':
-                  spotifyApi.containsMySavedAlbums([playlist.id])
-                      .then(function(data) {
-                          setIsFollowing(data.body[0])
-                      })
-                      .catch(function() {})
-                  break;
-          }
+      if (accessToken && playlist?.id) {
+          libraryContains(accessToken, type, [playlist.id])
+              .then(function(data) {
+                  setIsFollowing(data[0])
+              })
+              .catch(function() {})
       }
-    }, [spotifyApi.getAccessToken(), playlist])
+    }, [accessToken, playlist])
 
     const handleFollow = () => {
-        switch(type) {
-            case 'playlist':
-                if (isFollowing) {
-                    spotifyApi.unfollowPlaylist(playlist.id)
-                        .then(function() {
-                            setIsFollowing(false)
-                        })
-                        .catch(function() {})
-                } else {
-                    spotifyApi.followPlaylist(playlist.id)
-                        .then(function() {
-                            setIsFollowing(true)
-                        })
-                        .catch(function() {})
-                }
-                break;
-            case 'artist':
-                if (isFollowing) {
-                    spotifyApi.unfollowArtists([playlist.id])
-                        .then(function() {
-                            setIsFollowing(false)
-                        })
-                        .catch(function() {})
-                } else {
-                    spotifyApi.followArtists([playlist.id])
-                        .then(function() {
-                            setIsFollowing(true)
-                        })
-                        .catch(function() {})
-                }
-                break;
-            case 'user':
-                if (isFollowing) {
-                    spotifyApi.unfollowUsers([playlist.id])
-                        .then(function() {
-                            setIsFollowing(false)
-                        })
-                        .catch(function() {})
-                } else {
-                    spotifyApi.followUsers([playlist.id])
-                        .then(function() {
-                            setIsFollowing(true)
-                        })
-                        .catch(function() {})
-                }
-                break;
-            case 'album':
-                if (isFollowing) {
-                    spotifyApi.removeFromMySavedAlbums([playlist.id])
-                        .then(function() {
-                            setIsFollowing(false)
-                        })
-                        .catch(function() {})
-                } else {
-                    spotifyApi.addToMySavedAlbums([playlist.id])
-                        .then(function() {
-                            setIsFollowing(true)
-                        })
-                        .catch(function() {})
-                }
-                break;
+        if (!accessToken) return
+        if (isFollowing) {
+            libraryRemove(accessToken, type, [playlist.id])
+                .then(function() {
+                    setIsFollowing(false)
+                })
+                .catch(function() {})
+        } else {
+            libraryAdd(accessToken, type, [playlist.id])
+                .then(function() {
+                    setIsFollowing(true)
+                })
+                .catch(function() {})
         }
     }
 

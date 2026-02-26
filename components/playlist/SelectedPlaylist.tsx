@@ -1,11 +1,13 @@
 'use client'
 
-import { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
+import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 
-import Tracks from "../shared/Tracks"
-import useSpotify from "../../hooks/useSpotify"
-import CurrentCard from "../shared/CurrentCard"
+import Tracks from '../shared/Tracks'
+import useSpotify from '../../hooks/useSpotify'
+import useAccessToken from '../../hooks/useAccessToken'
+import { getPlaylistItems } from '../../lib/spotifyLibrary'
+import CurrentCard from '../shared/CurrentCard'
 
 interface Playlist {
     tracks: { items: any[] };
@@ -15,6 +17,7 @@ interface Playlist {
 
 export default function SelectedPlaylist() {
     const spotifyApi = useSpotify()
+    const accessToken = useAccessToken()
     const params = useParams()
     const playlistId = params?.playlistId as string
     const [ playlist, setPlaylist ] = useState(null as unknown as Playlist)
@@ -27,22 +30,22 @@ export default function SelectedPlaylist() {
     }, [playlistId])
 
     useEffect(() => {
-        if (spotifyApi.getAccessToken() && playlistId) {
+        if (spotifyApi.getAccessToken() && accessToken && playlistId) {
             spotifyApi.getPlaylist(playlistId)
                 .then((data) => {
                     setPlaylist(data.body)
                 })
 
-            spotifyApi.getPlaylistTracks(playlistId, { offset: offset, limit: 20 })
+            getPlaylistItems(accessToken, playlistId, { offset: offset, limit: 20 })
                 .then((data) => {
                     if (tracks.length) {
-                        setTracks((oldArray) => [...oldArray, ...data.body.items])
+                        setTracks((oldArray) => [...oldArray, ...data.items])
                     } else {
-                        setTracks(data.body.items)
+                        setTracks(data.items)
                     }
                 })
         }
-    }, [spotifyApi.getAccessToken(), playlistId, offset])
+    }, [spotifyApi.getAccessToken(), accessToken, playlistId, offset])
 
     return (
         <>

@@ -1,32 +1,34 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
-import useSpotify from "../../../hooks/useSpotify";
+import useAccessToken from '../../../hooks/useAccessToken'
+import { libraryContains, libraryAdd, libraryRemove } from '../../../lib/spotifyLibrary'
 
 export default function LeftSide({ track }) {
-    const spotifyApi = useSpotify()
+    const accessToken = useAccessToken()
     const [ isFollowed, setIsFollowed ] = useState(false)
 
     useEffect(() => {
-        if (spotifyApi.getAccessToken() && track) {
-            spotifyApi.containsMySavedTracks([track.id])
+        if (accessToken && track) {
+            libraryContains(accessToken, 'track', [track.id])
                 .then(function(data) {
-                    setIsFollowed(data.body[0])
+                    setIsFollowed(data[0])
                 })
                 .catch(function() {})
         }
-    }, [spotifyApi.getAccessToken(), track])
+    }, [accessToken, track])
 
     const handleFollow = () => {
+        if (!accessToken) return
         if (isFollowed) {
-            spotifyApi.removeFromMySavedTracks([track.id])
+            libraryRemove(accessToken, 'track', [track.id])
                 .then(function () {
                     setIsFollowed(false)
                 })
                 .catch(function () {})
         } else {
-            spotifyApi.addToMySavedTracks([track.id])
+            libraryAdd(accessToken, 'track', [track.id])
                 .then(function () {
                     setIsFollowed(true)
                 })

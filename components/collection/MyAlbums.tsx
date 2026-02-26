@@ -1,24 +1,25 @@
 'use client'
 
-import { SetStateAction, useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
 
-import useSpotify from "../../hooks/useSpotify"
-import Cards from "../shared/Cards";
+import useAccessToken from '../../hooks/useAccessToken'
+import spotifyFetch from '../../lib/spotifyFetch'
+import Cards from '../shared/Cards'
 
 export default function MyAlbums() {
-    const spotifyApi = useSpotify()
+    const accessToken = useAccessToken()
     const [ albums, setAlbums ] = useState([])
 
     useEffect(() => {
-        if (spotifyApi.getAccessToken()) {
-            spotifyApi.getMySavedAlbums()
-                .then(function(data: { body: { items: SetStateAction<never[]>; }; }) {
-                    setAlbums(data.body.items)
+        if (accessToken) {
+            spotifyFetch(accessToken, '/me/albums')
+                .then(function(data) {
+                    setAlbums(data.items)
                 })
                 .catch(function() {
                 })
         }
-    }, [spotifyApi.getAccessToken()])
+    }, [accessToken])
 
     return (
         <div className="px-4 mt-6 mx-8 sm:px-6 lg:px-8 mb-40">

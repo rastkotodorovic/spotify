@@ -1,18 +1,16 @@
 'use client'
 
-import { SetStateAction, useEffect, useState } from "react"
-import { useParams } from "next/navigation"
+import { SetStateAction, useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 
-import useSpotify from "../../hooks/useSpotify"
-import Cards from "../shared/Cards"
-import Tracks from "../shared/Tracks"
-import CurrentCard from "../shared/CurrentCard"
+import useSpotify from '../../hooks/useSpotify'
+import Cards from '../shared/Cards'
+import CurrentCard from '../shared/CurrentCard'
 
 export default function SelectedArtist() {
     const spotifyApi = useSpotify()
     const params = useParams()
     const artistId = params?.artistId as string
-    const [ tracks, setTracks ] = useState([])
     const [ albums, setAlbums ] = useState([])
     const [ artist, setArtist ] = useState([])
 
@@ -21,13 +19,6 @@ export default function SelectedArtist() {
           spotifyApi.getArtist(artistId)
               .then(function(data: { body: SetStateAction<never[]> }) {
                 setArtist(data.body)
-              })
-              .catch(function() {
-              })
-
-          spotifyApi.getArtistTopTracks(artistId, 'GB')
-              .then(function(data: { body: { tracks: SetStateAction<never[]> } }) {
-                  setTracks(data.body.tracks)
               })
               .catch(function() {
               })
@@ -47,9 +38,6 @@ export default function SelectedArtist() {
 
             <div className="mt-10">
                 <Cards playlists={albums} title="Albums" href="albums" />
-            </div>
-            <div className="my-20">
-              <Tracks tracks={tracks} />
             </div>
         </div>
     )

@@ -1,43 +1,49 @@
 'use client'
 
-import {useSession} from "next-auth/react"
-import {useParams} from "next/navigation"
-import {useEffect, useState} from "react"
+import { useSession } from 'next-auth/react'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
-import useSpotify from "../../hooks/useSpotify"
-import Cards from "../shared/Cards"
-import CurrentCard from "../shared/CurrentCard"
-import Tracks from "../shared/Tracks"
+import useSpotify from '../../hooks/useSpotify'
+import useAccessToken from '../../hooks/useAccessToken'
+import { getMyPlaylists } from '../../lib/spotifyLibrary'
+import Cards from '../shared/Cards'
+import CurrentCard from '../shared/CurrentCard'
+import Tracks from '../shared/Tracks'
 
 export default function SelectedUser() {
     const spotifyApi = useSpotify()
+    const accessToken = useAccessToken()
     const params = useParams()
     const { data: session } = useSession()
     const userId = params?.userId as string
-    const [ user, setUser ] = useState({id: ''})
+    const [ user, setUser ] = useState({ id: '' })
     const [ playlists, setPlaylists ] = useState([])
     const [ topTracks, setTopTracks ] = useState([])
     const [ topArtists, setTopArtists ] = useState([])
 
     useEffect(() => {
-        if (spotifyApi.getAccessToken() && userId) {
-            spotifyApi.getUser(userId)
-                .then((data) => {
-                    setUser(data.body)
-                })
+        const username = (session as any)?.user?.username
+        if (accessToken && userId && username) {
+            if (userId === username) {
+                setUser({
+                    id: username,
+                    ...(session?.user?.image ? { images: [{ url: session.user.image }] } : {}),
+                } as any)
+            }
         }
-    }, [spotifyApi.getAccessToken(), userId])
+    }, [accessToken, userId, session])
 
     useEffect(() => {
-        if (user) {
-            spotifyApi.getUserPlaylists(user.id)
+        if (user?.id && accessToken) {
+            getMyPlaylists(accessToken)
                 .then(function (data) {
-                    setPlaylists(data.body.items)
+                    setPlaylists(data.items)
                 })
                 .catch(function () {
                 })
 
-            if (user.id === session?.user?.username) {
+            if (user.id === (session as any)?.user?.username) {
                 spotifyApi.getMyTopTracks({ limit: 10 })
                     .then(function (data) {
                         setTopTracks(data.body.items)
@@ -64,7 +70,7 @@ export default function SelectedUser() {
                 <Cards playlists={playlists} title="Playlists" href="playlist"/>
             </div>
 
-            {user?.id === session?.user?.username && (
+            {user?.id === (session as any)?.user?.username && (
                 <>
                     <Cards playlists={topArtists} title="My top artists" href="artists"/>
 

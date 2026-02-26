@@ -1,8 +1,10 @@
 'use client'
 
-import { useTrackStore } from "../../store/playerStore"
-import useSpotify from "../../hooks/useSpotify"
-import millisToMinutesAndSeconds from "../../lib/time"
+import { useTrackStore } from '../../store/playerStore'
+import useSpotify from '../../hooks/useSpotify'
+import useAccessToken from '../../hooks/useAccessToken'
+import millisToMinutesAndSeconds from '../../lib/time'
+import { libraryAdd, libraryRemove } from '../../lib/spotifyLibrary'
 
 type Props = {
     track: any
@@ -16,6 +18,7 @@ type Props = {
 
 export default function Track({ track, number, isFollowed, setIsFollowed, lastTrack, playlist }: Props) {
     const spotifyApi = useSpotify()
+    const accessToken = useAccessToken()
     const trackId = useTrackStore((state) => state.trackId)
     const setTrackId = useTrackStore((state) => state.setTrackId)
     const setIsPlaying = useTrackStore((state) => state.setIsPlaying)
@@ -35,10 +38,11 @@ export default function Track({ track, number, isFollowed, setIsFollowed, lastTr
             .catch(() => {})
     }
 
-    const handleFollow = (e: { stopPropagation: () => void }) => {
-        e.stopPropagation()
+    const handleFollow = (event: { stopPropagation: () => void }) => {
+        event.stopPropagation()
+        if (!accessToken) return
         if (isFollowed[number]) {
-            spotifyApi.removeFromMySavedTracks([track.id])
+            libraryRemove(accessToken, 'track', [track.id])
                 .then(function () {
                     let newArr = [...isFollowed]
                     newArr[number] = false
@@ -48,7 +52,7 @@ export default function Track({ track, number, isFollowed, setIsFollowed, lastTr
                 .catch(function () {
                 })
         } else {
-            spotifyApi.addToMySavedTracks([track.id])
+            libraryAdd(accessToken, 'track', [track.id])
                 .then(function () {
                     let newArr = [...isFollowed]
                     newArr[number] = true

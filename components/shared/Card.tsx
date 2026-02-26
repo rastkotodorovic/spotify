@@ -1,62 +1,38 @@
 'use client'
 
-import { useRouter } from "next/navigation"
+import { useRouter } from 'next/navigation'
 
-import useSpotify from "../../hooks/useSpotify"
+import useAccessToken from '../../hooks/useAccessToken'
+import { libraryAdd, libraryRemove } from '../../lib/spotifyLibrary'
 
 export default function Card({ playlist, href, isFollowed, index, setIsFollowed }) {
     const router = useRouter()
-    const spotifyApi = useSpotify()
+    const accessToken = useAccessToken()
 
-    const handleFollow = (e: { stopPropagation: () => void }) => {
-        e.stopPropagation()
-        switch (href) {
-            case 'artists':
-                if (isFollowed[index]) {
-                    spotifyApi.unfollowArtists([playlist.id])
-                        .then(function () {
-                            let newArr = [...isFollowed]
-                            newArr[index] = false
+    const handleFollow = (event: { stopPropagation: () => void }) => {
+        event.stopPropagation()
+        if (!accessToken) return
+        const type = href === 'artists' ? 'artist' : 'album'
+        if (isFollowed[index]) {
+            libraryRemove(accessToken, type, [playlist.id])
+                .then(function () {
+                    let newArr = [...isFollowed]
+                    newArr[index] = false
 
-                            setIsFollowed(newArr)
-                        })
-                        .catch(function () {
-                        })
-                } else {
-                    spotifyApi.followArtists([playlist.id])
-                        .then(function () {
-                            let newArr = [...isFollowed]
-                            newArr[index] = true
+                    setIsFollowed(newArr)
+                })
+                .catch(function () {
+                })
+        } else {
+            libraryAdd(accessToken, type, [playlist.id])
+                .then(function () {
+                    let newArr = [...isFollowed]
+                    newArr[index] = true
 
-                            setIsFollowed(newArr)
-                        })
-                        .catch(function () {
-                        })
-                }
-                break
-            case 'albums':
-                if (isFollowed[index]) {
-                    spotifyApi.removeFromMySavedAlbums([playlist.id])
-                        .then(function() {
-                            let newArr = [...isFollowed]
-                            newArr[index] = false
-
-                            setIsFollowed(newArr)
-                        })
-                        .catch(function() {
-                        })
-                } else {
-                    spotifyApi.addToMySavedAlbums([playlist.id])
-                        .then(function() {
-                            let newArr = [...isFollowed]
-                            newArr[index] = true
-
-                            setIsFollowed(newArr)
-                        })
-                        .catch(function() {
-                        })
-                }
-                break
+                    setIsFollowed(newArr)
+                })
+                .catch(function () {
+                })
         }
     }
 

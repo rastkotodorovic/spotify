@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from 'react'
 import {
     ForwardIcon,
     PauseIcon,
@@ -8,11 +8,11 @@ import {
     ArrowPathIcon,
     BackwardIcon,
     ArrowsRightLeftIcon
-} from "@heroicons/react/24/solid"
+} from '@heroicons/react/24/solid'
 import { debounce } from 'lodash'
 
-import { useTrackStore } from "../../../store/playerStore"
-import millisToMinutesAndSeconds from "../../../lib/time"
+import { useTrackStore } from '../../../store/playerStore'
+import millisToMinutesAndSeconds from '../../../lib/time'
 
 export default function Center({ spotifyApi, track, changeSong }) {
     const isPlaying = useTrackStore((state) => state.isPlaying)
@@ -76,8 +76,8 @@ export default function Center({ spotifyApi, track, changeSong }) {
     )
 
     const handleShuffle = () => {
-        spotifyApi.setShuffle(! shuffle)
-        setShuffle(! shuffle)
+        spotifyApi.setShuffle(!shuffle)
+        setShuffle(!shuffle)
     }
 
     return (
