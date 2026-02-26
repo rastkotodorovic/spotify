@@ -44,7 +44,7 @@ export default function Cards({ playlists, title, href }) {
             <h2 className="text-gray-600 text-md font-medium tracking-wide">{title}</h2>
             <ul
                 role="list"
-                className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2 xl:grid-cols-6 mt-5 mb-16"
+                className="flex gap-6 overflow-x-auto mt-5 mb-16 pb-2"
             >
                 {playlists
                     ?.filter((playlist) => playlist && (playlist.album || playlist.id))

@@ -61,13 +61,13 @@ export default function Card({ playlist, href, isFollowed, index, setIsFollowed 
     }
 
     return (
-        <div className="bg-gray-100 w-60 shadow-md rounded p-2">
-            <div className="group relative" onClick={() => router.push(`/collection/${href === 'playlist' ? 'playlists' : href}/${playlist?.id}`)}>
-                <img alt="Placeholder" className=" rounded aspect-square"  src={playlist?.images[0]?.url} />
+        <div className="w-48 shrink-0 rounded group cursor-pointer" onClick={() => router.push(`/collection/${href === 'playlist' ? 'playlists' : href}/${playlist?.id}`)}>
+            <div className="relative">
+                <img alt="Placeholder" className="rounded aspect-square" src={playlist?.images[0]?.url} />
                 <div className="absolute bg-black rounded bg-opacity-0 group-hover:bg-opacity-60 w-full h-full top-0 flex items-center group-hover:opacity-100 duration-700 transition justify-evenly">
                     {href !== 'playlist' ? (
                         <button
-                            className="hover:scale-110 text-white outline-none  opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition"
+                            className="hover:scale-110 text-white outline-none opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition"
                             onClick={handleFollow}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-heart" viewBox="0 0 16 16">
@@ -85,7 +85,7 @@ export default function Card({ playlist, href, isFollowed, index, setIsFollowed 
                         </button>
                     )}
 
-                    <button  className="hover:scale-110 text-white outline-none opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition">
+                    <button className="hover:scale-110 text-white outline-none opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" className="bi bi-play-circle-fill" viewBox="0 0 16 16">
                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z" />
                         </svg>

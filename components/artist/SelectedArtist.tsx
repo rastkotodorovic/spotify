@@ -14,7 +14,6 @@ export default function SelectedArtist() {
     const artistId = params?.artistId as string
     const [ tracks, setTracks ] = useState([])
     const [ albums, setAlbums ] = useState([])
-    const [ artists, setArtists ] = useState([])
     const [ artist, setArtist ] = useState([])
 
     useEffect(() => {
@@ -32,11 +31,6 @@ export default function SelectedArtist() {
               })
               .catch(function() {
               })
-
-            spotifyApi.getArtistRelatedArtists(artistId)
-                .then(function(data: { body: { artists: SetStateAction<never[]> } }) {
-                  setArtists(data.body.artists)
-                })
 
             spotifyApi.getArtistAlbums(artistId, { limit: 12 })
                 .then(function(data: { body: { items: SetStateAction<never[]> } }) {
@@ -56,9 +50,6 @@ export default function SelectedArtist() {
             </div>
             <div className="my-20">
               <Tracks tracks={tracks} />
-            </div>
-            <div className="mb-40">
-                <Cards playlists={artists} title="Related artists" href="artists" />
             </div>
         </div>
     )
