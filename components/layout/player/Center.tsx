@@ -75,6 +75,24 @@ export default function Center({ spotifyApi, track, changeSong }) {
         []
     )
 
+    const handleSkipToNext = () => {
+        spotifyApi.skipToNext()
+            .then(function () {
+                setSeek(0)
+                setTimeout(() => changeSong(), 500)
+            })
+            .catch(() => {})
+    }
+
+    const handleSkipToPrevious = () => {
+        spotifyApi.skipToPrevious()
+            .then(function () {
+                setSeek(0)
+                setTimeout(() => changeSong(), 500)
+            })
+            .catch(() => {})
+    }
+
     const handleShuffle = () => {
         spotifyApi.setShuffle(!shuffle)
         setShuffle(!shuffle)
@@ -89,7 +107,7 @@ export default function Center({ spotifyApi, track, changeSong }) {
                         onClick={handleShuffle}
                     />
                     <BackwardIcon
-                        onClick={() => spotifyApi.skipToPrevious()}
+                        onClick={handleSkipToPrevious}
                         className="ml-10 btn-player"
                     />
                     {isPlaying ? (
@@ -99,7 +117,7 @@ export default function Center({ spotifyApi, track, changeSong }) {
                     )}
 
                     <ForwardIcon
-                        onClick={() => spotifyApi.skipToNext()}
+                        onClick={handleSkipToNext}
                         className="mr-10 btn-player"
                     />
 

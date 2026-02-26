@@ -1,14 +1,16 @@
 'use client'
 
-import { SpeakerXMarkIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid'
+import { SpeakerXMarkIcon, SpeakerWaveIcon, QueueListIcon } from '@heroicons/react/24/solid'
 import { useCallback, useEffect, useState } from 'react'
 import { debounce } from 'lodash'
 
-import { useTrackStore } from '../../../store/playerStore'
+import { useTrackStore, useQueueStore } from '../../../store/playerStore'
 
 export default function RightSide({ spotifyApi }) {
     const [ volume, setVolume ] = useState(100)
     const isPlaying = useTrackStore((state) => state.isPlaying)
+    const isQueueOpen = useQueueStore((state) => state.isQueueOpen)
+    const toggleQueue = useQueueStore((state) => state.toggleQueue)
 
     useEffect(() => {
         if (volume >= 0 && volume <= 100 && isPlaying) {
@@ -26,6 +28,10 @@ export default function RightSide({ spotifyApi }) {
 
     return (
         <div className="flex items-center space-x-3 md:space-x-4 justify-end">
+            <QueueListIcon
+                className={`btn-player ${isQueueOpen ? 'fill-green-500' : ''}`}
+                onClick={toggleQueue}
+            />
             <SpeakerXMarkIcon
                 className="btn-player"
                 onClick={() => setVolume(0)}

@@ -5,6 +5,7 @@ import useSpotify from '../../hooks/useSpotify'
 import useAccessToken from '../../hooks/useAccessToken'
 import millisToMinutesAndSeconds from '../../lib/time'
 import { libraryAdd, libraryRemove } from '../../lib/spotifyLibrary'
+import { addToQueue } from '../../lib/spotifyQueue'
 
 type Props = {
     track: any
@@ -36,6 +37,12 @@ export default function Track({ track, number, isFollowed, setIsFollowed, lastTr
                 setIsPlaying(true)
             })
             .catch(() => {})
+    }
+
+    const handleAddToQueue = (event: { stopPropagation: () => void }) => {
+        event.stopPropagation()
+        if (!accessToken) return
+        addToQueue(accessToken, track.uri).catch(function () {})
     }
 
     const handleFollow = (event: { stopPropagation: () => void }) => {
@@ -97,7 +104,7 @@ export default function Track({ track, number, isFollowed, setIsFollowed, lastTr
                 {new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit'}).format(track.added_at)}
             </td>
             <td className="px-6 py-3 whitespace-nowrap text-sm font-medium flex justify-between text-gray-500">
-                <div>
+                <div className="flex items-center space-x-2">
                     <button onClick={handleFollow}>
                         {isFollowed[--number] ? (
                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" className="bi bi-heart mt-4 fill-green-500" viewBox="0 0 16 16">
@@ -108,6 +115,11 @@ export default function Track({ track, number, isFollowed, setIsFollowed, lastTr
                                 <path d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
                             </svg>
                         )}
+                    </button>
+                    <button onClick={handleAddToQueue} title="Add to queue">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" className="mt-4 text-gray-500 hover:text-gray-900" viewBox="0 0 24 24">
+                            <path fillRule="evenodd" d="M2.625 6.75a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Zm4.875 0A.75.75 0 0 1 8.25 6h12a.75.75 0 0 1 0 1.5h-12a.75.75 0 0 1-.75-.75ZM2.625 12a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0ZM7.5 12a.75.75 0 0 1 .75-.75h12a.75.75 0 0 1 0 1.5h-12A.75.75 0 0 1 7.5 12Zm-4.875 5.25a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Zm4.875 0a.75.75 0 0 1 .75-.75h12a.75.75 0 0 1 0 1.5h-12a.75.75 0 0 1-.75-.75Z" clipRule="evenodd" />
+                        </svg>
                     </button>
                 </div>
                 <div className="mt-3">

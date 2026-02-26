@@ -13,6 +13,7 @@ export default function SelectedArtist() {
     const artistId = params?.artistId as string
     const [ albums, setAlbums ] = useState([])
     const [ artist, setArtist ] = useState([])
+    const [ relatedArtists, setRelatedArtists ] = useState([])
 
     useEffect(() => {
         if (spotifyApi.getAccessToken() && artistId) {
@@ -29,6 +30,13 @@ export default function SelectedArtist() {
                 })
                 .catch(function() {
                 })
+
+            spotifyApi.getArtistRelatedArtists(artistId)
+                .then(function(data: { body: { artists: SetStateAction<never[]> } }) {
+                  setRelatedArtists(data.body.artists)
+                })
+                .catch(function() {
+                })
         }
     }, [spotifyApi.getAccessToken(), artistId])
 
@@ -39,6 +47,12 @@ export default function SelectedArtist() {
             <div className="mt-10">
                 <Cards playlists={albums} title="Albums" href="albums" />
             </div>
+
+            {relatedArtists.length > 0 && (
+                <div className="mt-10">
+                    <Cards playlists={relatedArtists} title="Fans also like" href="artists" />
+                </div>
+            )}
         </div>
     )
 }

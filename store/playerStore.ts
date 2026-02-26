@@ -30,3 +30,15 @@ export const usePlaylistStore = create<PlaylistState>((set) => ({
   myPlaylists: [],
   setMyPlaylists: (playlists) => set({ myPlaylists: playlists }),
 }))
+
+interface QueueState {
+  isQueueOpen: boolean
+  setIsQueueOpen: (open: boolean) => void
+  toggleQueue: () => void
+}
+
+export const useQueueStore = create<QueueState>((set) => ({
+  isQueueOpen: false,
+  setIsQueueOpen: (open) => set({ isQueueOpen: open }),
+  toggleQueue: () => set((state) => ({ isQueueOpen: !state.isQueueOpen })),
+}))

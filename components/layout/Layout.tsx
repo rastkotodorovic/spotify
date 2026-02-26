@@ -2,6 +2,7 @@
 
 import Sidebar from "./sidebar/Sidebar"
 import Player from "./player/Player"
+import QueuePanel from "./player/QueuePanel"
 import Header from "./Header"
 
 interface LayoutProps {
@@ -17,6 +18,7 @@ export default function Layout({ children }: LayoutProps) {
                   {children}
               </Header>
           </div>
+          <QueuePanel />
           <div className="fixed w-full bottom-0 ">
               <Player />
           </div>
