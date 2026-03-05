@@ -1,16 +1,18 @@
 'use client'
 
-import { SpeakerXMarkIcon, SpeakerWaveIcon, QueueListIcon } from '@heroicons/react/24/solid'
+import { SpeakerXMarkIcon, SpeakerWaveIcon, QueueListIcon, ComputerDesktopIcon } from '@heroicons/react/24/solid'
 import { useCallback, useEffect, useState } from 'react'
 import { debounce } from 'lodash'
 
-import { useTrackStore, useQueueStore } from '../../../store/playerStore'
+import { useTrackStore, useQueueStore, useDeviceStore } from '../../../store/playerStore'
 
 export default function RightSide({ spotifyApi }) {
     const [ volume, setVolume ] = useState(100)
     const isPlaying = useTrackStore((state) => state.isPlaying)
     const isQueueOpen = useQueueStore((state) => state.isQueueOpen)
     const toggleQueue = useQueueStore((state) => state.toggleQueue)
+    const isDevicePanelOpen = useDeviceStore((state) => state.isDevicePanelOpen)
+    const toggleDevicePanel = useDeviceStore((state) => state.toggleDevicePanel)
 
     useEffect(() => {
         if (volume >= 0 && volume <= 100 && isPlaying) {
@@ -28,6 +30,10 @@ export default function RightSide({ spotifyApi }) {
 
     return (
         <div className="flex items-center space-x-3 md:space-x-4 justify-end">
+            <ComputerDesktopIcon
+                className={`btn-player ${isDevicePanelOpen ? 'fill-green-500' : ''}`}
+                onClick={toggleDevicePanel}
+            />
             <QueueListIcon
                 className={`btn-player ${isQueueOpen ? 'fill-green-500' : ''}`}
                 onClick={toggleQueue}

@@ -42,3 +42,16 @@ export const useQueueStore = create<QueueState>((set) => ({
   setIsQueueOpen: (open) => set({ isQueueOpen: open }),
   toggleQueue: () => set((state) => ({ isQueueOpen: !state.isQueueOpen })),
 }))
+
+interface DeviceState {
+  isDevicePanelOpen: boolean
+  setIsDevicePanelOpen: (open: boolean) => void
+  toggleDevicePanel: () => void
+}
+
+export const useDeviceStore = create<DeviceState>((set) => ({
+  isDevicePanelOpen: false,
+  setIsDevicePanelOpen: (open) => set({ isDevicePanelOpen: open }),
+  toggleDevicePanel: () =>
+    set((state) => ({ isDevicePanelOpen: !state.isDevicePanelOpen })),
+}))
