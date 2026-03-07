@@ -97,27 +97,3 @@ A full-featured Spotify web client built with Next.js 15, React 18, and the Spot
 | `npm run dev` | Start the development server |
 | `npm run build` | Create a production build |
 | `npm run start` | Serve the production build |
-
-## Project Structure
-
-```
-app/                    # Next.js App Router pages
-  (main)/               # Authenticated routes (home, search, collection, users)
-  login/                # Login page
-  api/auth/             # NextAuth API route
-components/
-  layout/               # Shell layout — sidebar, header, player
-    player/             # Playback controls, seek bar, volume
-    sidebar/            # Navigation, profile, search, playlist list
-  shared/               # Reusable components — Card, Track, Tracks (infinite scroll)
-  album/                # Album detail page
-  artist/               # Artist detail page
-  playlist/             # Playlist detail, create modal, add-to-playlist menu
-  collection/           # Library browsing pages
-  search/               # Search results
-  landing/              # Home page content
-  user/                 # User profile page
-hooks/                  # Custom React hooks (useSpotify, useAccessToken, etc.)
-lib/                    # Spotify API helpers and utilities
-store/                  # Zustand stores for player, playlist, queue, device state
-```
